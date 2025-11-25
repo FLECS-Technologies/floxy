@@ -1,0 +1,19 @@
+[package]
+name = "floxy-entrypoint"
+version = "0.2.0"
+edition = "2024"
+
+[dependencies]
+askama = "0.14.0"
+envy = "0.4.2"
+nix = { version = "0.30.1", features = ["inotify", "net", "poll", "signal"] }
+serde = { version = "1.0.228", features = ["derive"] }
+
+[profile.release]
+opt-level = "s"
+panic = "abort"
+lto = true
+codegen-units = 1
+strip = true
+debug = false
+incremental = false
