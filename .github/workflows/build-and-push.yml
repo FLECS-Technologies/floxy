@@ -6,6 +6,10 @@ on:
       tag:
         required: true
         type: string
+      dry-run:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-and-push:
@@ -45,7 +49,7 @@ jobs:
         with:
           files: docker-bake.hcl
           pull: true
-          push: true
+          push: ${{ inputs.dry-run == false }}
           set: |
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
