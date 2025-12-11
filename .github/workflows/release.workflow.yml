@@ -2,13 +2,14 @@ name: Release
 
 on:
   release:
-    types: [created, published]
+    types: [published]
 
 permissions:
   contents: write
 
 jobs:
   build-and-push:
+    name: Build and push latest ${{ github.event.release.prerelease && '(dry-run)' || '' }})
     uses: ./.github/workflows/build-and-push.yml
     with:
       dry-run: ${{ github.event.release.prerelease }}
@@ -16,6 +17,7 @@ jobs:
     secrets: inherit
 
   bump-version:
+    name: Bump version
     runs-on: ubuntu-24.04
     needs: build-and-push
     if: success()
@@ -35,7 +37,7 @@ jobs:
           cd ./entrypoint
           cargo set-version --bump minor
 
-      - name: Commit version bump
+      - name: Commit version bump ${{ github.event.release.prerelease && '(dry-run)' || '' }})
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
