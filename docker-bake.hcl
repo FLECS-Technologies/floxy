@@ -1,5 +1,9 @@
-variable "TAG" {
+variable "CHANNEL" {
   default = "dev"
+}
+
+variable "VERSION" {
+  default = ""
 }
 
 group "default" {
@@ -22,11 +26,13 @@ target "all" {
     build_type = [
       {
         type = "debug"
-        tag = "${TAG}-debug"
+        channel_tag = "${CHANNEL}-debug"
+        version_tag = "${VERSION}-debug"
       },
       {
         type = "release"
-        tag = "${TAG}"
+        channel_tag = "${CHANNEL}"
+        version_tag = "${VERSION}"
       }
     ]
   }
@@ -35,5 +41,12 @@ target "all" {
   }
   platforms = ["linux/amd64", "linux/arm64"]
   target = build_type.type
-  tags = ["flecspublic.azurecr.io/flecs/floxy:${build_type.tag}"]
+  tags = [
+    notequal("", CHANNEL)
+      ? "flecspublic.azurecr.io/flecs/floxy:${build_type.channel_tag}"
+      : "",
+    notequal("", VERSION)
+      ? "flecspublic.azurecr.io/flecs/floxy:${build_type.version_tag}"
+      : "",
+  ]
 }
