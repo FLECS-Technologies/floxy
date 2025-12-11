@@ -15,6 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Determine git revision
+        id: git-rev
+        run: |
+          echo "git-sha=$(git rev-parse --short HEAD)" >>"$GITHUB_OUTPUT"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -36,6 +41,7 @@ jobs:
         uses: docker/bake-action@v6
         env:
           TAG: ${{ inputs.tag }}
+          GIT_SHA: ${{ steps.git-rev.outputs.git-sha }}
         with:
           files: docker-bake.hcl
           pull: true
