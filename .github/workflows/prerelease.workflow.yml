@@ -1,0 +1,13 @@
+name: Prerelease
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-push:
+    name: Build and push rc
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      tag: ${{ github.event.release.tag_name }}
+    secrets: inherit
