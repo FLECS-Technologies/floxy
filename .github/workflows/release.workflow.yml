@@ -13,7 +13,8 @@ jobs:
     uses: ./.github/workflows/build-and-push.yml
     with:
       dry-run: ${{ github.event.release.prerelease }}
-      tag: latest
+      channel: latest
+      version: ${{ github.event.release.tag_name }}
     secrets: inherit
 
   bump-version:

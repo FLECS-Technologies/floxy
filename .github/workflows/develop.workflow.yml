@@ -10,5 +10,5 @@ jobs:
     name: Build and push dev
     uses: ./.github/workflows/build-and-push.yml
     with:
-      tag: dev
+      channel: dev
     secrets: inherit

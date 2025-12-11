@@ -3,8 +3,11 @@ name: Bake
 on:
   workflow_call:
     inputs:
-      tag:
+      channel:
         required: true
+        type: string
+      version:
+        required: false
         type: string
       dry-run:
         required: false
@@ -44,8 +47,9 @@ jobs:
       - name: Build and push Docker image
         uses: docker/bake-action@v6
         env:
-          TAG: ${{ inputs.tag }}
+          CHANNEL: ${{ inputs.channel }}
           GIT_SHA: ${{ steps.git-rev.outputs.git-sha }}
+          VERSION: ${{ inputs.version }}
         with:
           files: docker-bake.hcl
           pull: true
