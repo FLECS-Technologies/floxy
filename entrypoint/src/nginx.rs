@@ -36,7 +36,11 @@ impl From<FloxyEnvironment> for FloxyConfTemplate {
 
         let gateway = value.flecs_gateway.unwrap_or(DEFAULT_DOCKER_GATEWAY.into());
         Self {
-            floxy_version: env!("CARGO_PKG_VERSION").to_string(),
+            floxy_version: format!(
+                "{}-{}",
+                env!("CARGO_PKG_VERSION"),
+                option_env!("GIT_SHA").unwrap_or("unknown")
+            ),
             floxy_http_port: value.http_port.unwrap_or(DEFAULT_HTTP_PORT),
             floxy_https_port: value.https_port.unwrap_or(DEFAULT_HTTPS_PORT),
             webapp_ipv4: value.webapp_ipv4.unwrap_or(default_webapp_ipv4(&gateway)),
