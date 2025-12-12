@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-push:
-    name: Build and push dev
+    name: Build and push dev ${{ github.event_name == 'pull_request' && '(dry-run)' || '' }}
     uses: ./.github/workflows/build-and-push.yml
     with:
       channel: dev

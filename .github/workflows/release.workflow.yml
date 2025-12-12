@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   build-and-push:
-    name: Build and push latest ${{ github.event.release.prerelease && '(dry-run)' || '' }})
+    name: Build and push latest ${{ github.event.release.prerelease && '(dry-run)' || '' }}
     uses: ./.github/workflows/build-and-push.yml
     with:
       dry-run: ${{ github.event.release.prerelease }}
