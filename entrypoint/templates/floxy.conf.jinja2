@@ -85,7 +85,7 @@ server {
   include /etc/nginx/conf.d/floxy/instances/*.conf;
 
   location = / {
-    return 301 /ui/;
+    return 302 /ui/;
   }
 
   location / {
