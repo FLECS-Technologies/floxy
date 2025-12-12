@@ -84,6 +84,10 @@ server {
   {% endif %}
   include /etc/nginx/conf.d/floxy/instances/*.conf;
 
+  location = / {
+    return 301 /ui/;
+  }
+
   location / {
     return 404;
   }
