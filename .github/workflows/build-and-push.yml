@@ -6,7 +6,7 @@ on:
       channel:
         required: true
         type: string
-      version:
+      versions:
         required: false
         type: string
       dry-run:
@@ -44,12 +44,27 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_AUTH }}
 
-      - name: Build ${{ inputs.dry-run == false && 'and push' || '' }} Docker image
+      - name: Build ${{ inputs.dry-run == false && 'and push' || '' }} Docker image with VERSIONS
+        if: inputs.versions != null && inputs.versions != ''
         uses: docker/bake-action@v6
         env:
           CHANNEL: ${{ inputs.channel }}
           GIT_SHA: ${{ steps.git-rev.outputs.git-sha }}
-          VERSION: ${{ inputs.version }}
+          VERSIONS: ${{ inputs.versions }}
+        with:
+          files: docker-bake.hcl
+          pull: true
+          push: ${{ inputs.dry-run == false }}
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
+
+      - name: Build ${{ inputs.dry-run == false && 'and push' || '' }} Docker image without VERSIONS
+        if: inputs.versions == null || inputs.versions == ''
+        uses: docker/bake-action@v6
+        env:
+          CHANNEL: ${{ inputs.channel }}
+          GIT_SHA: ${{ steps.git-rev.outputs.git-sha }}
         with:
           files: docker-bake.hcl
           pull: true

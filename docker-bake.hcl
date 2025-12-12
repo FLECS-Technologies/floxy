@@ -2,8 +2,9 @@ variable "CHANNEL" {
   default = "dev"
 }
 
-variable "VERSION" {
-  default = ""
+variable "VERSIONS" {
+  type = list(string)
+  default = []
 }
 
 group "default" {
@@ -27,12 +28,12 @@ target "all" {
       {
         type = "debug"
         channel_tag = "${CHANNEL}-debug"
-        version_tag = "${VERSION}-debug"
+        version_suffix = "-debug"
       },
       {
         type = "release"
         channel_tag = "${CHANNEL}"
-        version_tag = "${VERSION}"
+        version_suffix = ""
       }
     ]
   }
@@ -41,12 +42,13 @@ target "all" {
   }
   platforms = ["linux/amd64", "linux/arm64"]
   target = build_type.type
-  tags = [
+  tags = flatten([
     notequal("", CHANNEL)
-      ? "flecspublic.azurecr.io/flecs/floxy:${build_type.channel_tag}"
-      : "",
-    notequal("", VERSION)
-      ? "flecspublic.azurecr.io/flecs/floxy:${build_type.version_tag}"
-      : "",
-  ]
+      ? ["flecspublic.azurecr.io/flecs/floxy:${build_type.channel_tag}"]
+      : [],
+    [
+    for V in VERSIONS :
+      "flecspublic.azurecr.io/flecs/floxy:${V}${build_type.version_suffix}"
+    ]
+  ])
 }

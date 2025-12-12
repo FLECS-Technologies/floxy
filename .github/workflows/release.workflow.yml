@@ -8,13 +8,37 @@ permissions:
   contents: write
 
 jobs:
+  determine-version-tags:
+    name: Determine version tags
+    runs-on: ubuntu-24.04
+    outputs:
+      version-list: ${{ steps.parse-cargo-versions.outputs.version-list }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Parse Cargo.toml
+        id: parse-cargo-versions
+        run: |
+          cd entrypoint
+          VERSION=$(cargo metadata --no-deps --format-version 1 \
+            | jq -r '.packages[0].version')
+          MAJOR_VERSION=$(printf '%s\n' "$VERSION" | cut -d. -f1)
+          MINOR_VERSION=$(printf '%s\n' "$VERSION" | cut -d. -f1,2)
+          set -- "$MAJOR_VERSION" "$MINOR_VERSION" "$VERSION"
+          printf 'version-list=%s\n' "$(IFS=,; printf '%s' "$*")" >>"$GITHUB_OUTPUT"
+
   build-and-push:
     name: Build and push latest ${{ github.event.release.prerelease && '(dry-run)' || '' }}
+    needs: determine-version-tags
+    if: success()
     uses: ./.github/workflows/build-and-push.yml
     with:
       dry-run: ${{ github.event.release.prerelease }}
       channel: latest
-      version: ${{ github.event.release.tag_name }}
+      versions: ${{ needs.determine-version-tags.outputs.version-list }}
     secrets: inherit
 
   bump-version:
