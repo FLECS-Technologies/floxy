@@ -44,7 +44,7 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_AUTH }}
 
-      - name: Build and push Docker image
+      - name: Build ${{ inputs.dry-run == false && 'and push' || '' }} Docker image
         uses: docker/bake-action@v6
         env:
           CHANNEL: ${{ inputs.channel }}
