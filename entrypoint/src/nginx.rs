@@ -39,7 +39,9 @@ impl From<FloxyEnvironment> for FloxyConfTemplate {
             floxy_version: format!(
                 "{}-{}",
                 env!("CARGO_PKG_VERSION"),
-                option_env!("GIT_SHA").unwrap_or("unknown")
+                option_env!("GIT_SHA")
+                    .filter(|v| !v.is_empty())
+                    .unwrap_or("unknown")
             ),
             floxy_http_port: value.http_port.unwrap_or(DEFAULT_HTTP_PORT),
             floxy_https_port: value.https_port.unwrap_or(DEFAULT_HTTPS_PORT),
