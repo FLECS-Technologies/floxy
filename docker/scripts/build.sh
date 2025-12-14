@@ -32,5 +32,7 @@ export CARGO_PROFILE_ARG
 export CARGO_PROFILE_DIR
 export RUSTFLAGS="-C linker=${RUST_LINKER}"
 
+echo "GIT_SHA=$GIT_SHA"
+
 cargo build --profile ${CARGO_PROFILE_ARG} --target ${CARGO_BUILD_TARGET}
 cp ./target/${CARGO_BUILD_TARGET}/${CARGO_PROFILE_DIR}/floxy-entrypoint /entrypoint
