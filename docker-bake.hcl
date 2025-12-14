@@ -2,6 +2,10 @@ variable "CHANNEL" {
   default = "dev"
 }
 
+variable "GIT_SHA" {
+  default = ""
+}
+
 variable "VERSIONS" {
   type = list(string)
   default = []
@@ -39,6 +43,7 @@ target "all" {
   }
   args = {
     BUILD_TYPE = build_type.type
+    GIT_SHA = GIT_SHA
   }
   platforms = ["linux/amd64", "linux/arm64"]
   target = build_type.type

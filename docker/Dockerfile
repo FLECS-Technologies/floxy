@@ -8,6 +8,9 @@ FROM --platform=${BUILDPLATFORM} rust:alpine AS entrypoint
 ARG BUILD_TYPE=debug
 ARG TARGETPLATFORM
 
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
+
 COPY entrypoint/ /src/entrypoint
 COPY docker/scripts/ /tmp/scripts
 
