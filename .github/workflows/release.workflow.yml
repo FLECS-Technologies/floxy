@@ -57,10 +57,10 @@ jobs:
           cd ./entrypoint
           cargo install --locked cargo-edit
 
-      - name: Bump minor version
+      - name: Bump patch version
         run: |
           cd ./entrypoint
-          cargo set-version --bump minor
+          cargo set-version --bump patch
 
       - name: Commit version bump ${{ github.event.release.prerelease && '(dry-run)' || '' }})
         run: |
