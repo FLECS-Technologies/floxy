@@ -50,7 +50,7 @@ server {
   }
 
   location = /api/v2/imports {
-    proxy_pass http://{{ flecs_gateway }}:8951/v2/imports;
+    proxy_pass http://{{ flecs_gateway }}:{{ flecs_http_port }}/v2/imports;
 
     include conf.d/include/proxy_headers.conf;
 
@@ -59,7 +59,7 @@ server {
   }
 
   location /api/ {
-    proxy_pass http://{{ flecs_gateway }}:8951/;
+    proxy_pass http://{{ flecs_gateway }}:{{ flecs_http_port }}/;
 
     include conf.d/include/proxy_headers.conf;
   }

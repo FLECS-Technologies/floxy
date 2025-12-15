@@ -7,12 +7,12 @@ pub fn default_webapp_ipv4(gateway: &Ipv4Addr) -> Ipv4Addr {
 }
 
 #[derive(Debug, Deserialize)]
-#[allow(unused)]
 pub struct FloxyEnvironment {
-    pub http_port: Option<u16>,
-    pub https_port: Option<u16>,
-    pub webapp_ipv4: Option<Ipv4Addr>,
-    pub webapp_http_port: Option<u16>,
-    pub webapp_https_port: Option<u16>,
-    pub flecs_gateway: Option<Ipv4Addr>,
+    pub http_port: Option<u16>,          // http port floxy listens on
+    pub https_port: Option<u16>,         // https port floxy listens on
+    pub webapp_ipv4: Option<Ipv4Addr>,   // IPv4 address of container `flecs-webapp`
+    pub webapp_http_port: Option<u16>,   // `flecs-webapp` http port
+    pub webapp_https_port: Option<u16>,  // `flecs-webapp` https port
+    pub flecs_gateway: Option<Ipv4Addr>, // IPv4 address of `flecs-flecsd`
+    pub flecs_http_port: Option<u16>,    // Port of `flecs-flecsd`
 }
