@@ -16,7 +16,7 @@ use crate::{
     warn,
 };
 
-#[derive(Template)]
+#[derive(Debug, Template)]
 #[template(path = "floxy.conf.jinja2")]
 struct FloxyConfTemplate {
     floxy_version: String,
@@ -26,6 +26,7 @@ struct FloxyConfTemplate {
     webapp_http_port: u16,
     webapp_https_port: Option<u16>,
     flecs_gateway: Ipv4Addr,
+    flecs_http_port: u16,
 }
 
 impl From<FloxyEnvironment> for FloxyConfTemplate {
@@ -33,6 +34,7 @@ impl From<FloxyEnvironment> for FloxyConfTemplate {
         const DEFAULT_HTTP_PORT: u16 = 80;
         const DEFAULT_HTTPS_PORT: u16 = 443;
         const DEFAULT_DOCKER_GATEWAY: [u8; 4] = [172, 21, 0, 1];
+        const DEFAULT_FLECS_HTTP_PORT: u16 = 8951;
 
         let gateway = value.flecs_gateway.unwrap_or(DEFAULT_DOCKER_GATEWAY.into());
         Self {
@@ -49,6 +51,7 @@ impl From<FloxyEnvironment> for FloxyConfTemplate {
             webapp_http_port: value.webapp_http_port.unwrap_or(DEFAULT_HTTP_PORT),
             webapp_https_port: value.webapp_https_port,
             flecs_gateway: gateway,
+            flecs_http_port: value.flecs_http_port.unwrap_or(DEFAULT_FLECS_HTTP_PORT),
         }
     }
 }
@@ -59,6 +62,7 @@ const NGINX_STARTUP_TIMEOUT_MS: u64 = 30000;
 const FLOXY_CONFIG_PATH: &str = "/etc/nginx/conf.d/floxy.conf";
 
 fn validate_config(config: &FloxyConfTemplate) {
+    info!("Using floxy_template configuration {config:?}");
     if config.floxy_http_port == config.floxy_https_port {
         panic!("Invalid configuration: floxy_http_port == floxy_https_port");
     }
