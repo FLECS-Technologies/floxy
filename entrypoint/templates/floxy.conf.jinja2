@@ -12,7 +12,9 @@ add_header Floxy-Version "{{ floxy_version }}";
 
 server {
   listen {{ floxy_http_port }};
+  {% if enable_ipv6 -%}
   listen [::]:{{ floxy_http_port }};
+  {%- endif %}
   server_name _;
 
   location = /health {
@@ -36,7 +38,9 @@ upstream webapp_https {
 {% endif %}
 server {
   listen {{ floxy_https_port }} ssl;
+  {% if enable_ipv6 -%}
   listen [::]:{{ floxy_https_port }} ssl;
+  {%- endif %}
   server_name _;
 
   include conf.d/include/ssl.conf;

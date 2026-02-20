@@ -27,6 +27,7 @@ struct FloxyConfTemplate {
     webapp_https_port: Option<u16>,
     flecs_gateway: Ipv4Addr,
     flecs_http_port: u16,
+    enable_ipv6: bool,
 }
 
 impl From<FloxyEnvironment> for FloxyConfTemplate {
@@ -35,6 +36,7 @@ impl From<FloxyEnvironment> for FloxyConfTemplate {
         const DEFAULT_HTTPS_PORT: u16 = 443;
         const DEFAULT_DOCKER_GATEWAY: [u8; 4] = [172, 21, 0, 1];
         const DEFAULT_FLECS_HTTP_PORT: u16 = 8951;
+        const DEFAULT_ENABLE_IPV6: bool = false;
 
         let gateway = value.flecs_gateway.unwrap_or(DEFAULT_DOCKER_GATEWAY.into());
         Self {
@@ -52,6 +54,7 @@ impl From<FloxyEnvironment> for FloxyConfTemplate {
             webapp_https_port: value.webapp_https_port,
             flecs_gateway: gateway,
             flecs_http_port: value.flecs_http_port.unwrap_or(DEFAULT_FLECS_HTTP_PORT),
+            enable_ipv6: value.enable_ipv6.unwrap_or(DEFAULT_ENABLE_IPV6),
         }
     }
 }
