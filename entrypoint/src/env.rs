@@ -15,4 +15,5 @@ pub struct FloxyEnvironment {
     pub webapp_https_port: Option<u16>,  // `flecs-webapp` https port
     pub flecs_gateway: Option<Ipv4Addr>, // IPv4 address of `flecs-flecsd`
     pub flecs_http_port: Option<u16>,    // Port of `flecs-flecsd`
+    pub enable_ipv6: Option<bool>,       // Switch to enable IPv6
 }
