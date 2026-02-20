@@ -42,7 +42,7 @@ jobs:
     secrets: inherit
 
   bump-version:
-    name: Bump version
+    name: Bump version ${{ github.event.release.prerelease && '(dry-run)' || '' }}
     runs-on: ubuntu-24.04
     needs: build-and-push
     if: success()
@@ -62,7 +62,7 @@ jobs:
           cd ./entrypoint
           cargo set-version --bump patch
 
-      - name: Commit version bump ${{ github.event.release.prerelease && '(dry-run)' || '' }})
+      - name: Commit version bump
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
